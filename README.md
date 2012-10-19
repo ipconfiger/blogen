@@ -30,6 +30,8 @@ Can you read chinese？yes i cam
 * templates是模板文件。这里只是生成了一个最简单的，模板可以完全根据自己的需要来改
 * static是存放站点的CSS，JS和图片文件的地方
 
+** 注意：templates目录下会默认生成 index.html 和 post.html，这两个文件一个是首页模板和内容页模板，可以自由修改，保持名字不变即可 **
+
 ###3 发布第一篇blog
 发布blog只需要一条命令即可
 
