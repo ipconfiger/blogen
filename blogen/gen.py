@@ -12,7 +12,7 @@ sys.path.append(os.getcwd())
 PAGE_SIZE = 5
 BASE_PATH = os.getcwd()
 INDEX_PATH = os.sep.join([BASE_PATH, "index"])
-POSTS_BASE = os.sep.join([BASE_PATH, "posts"])
+POSTS_BASE = os.sep.join([BASE_PATH, "_data"])
 HTML_BASE = os.sep.join([BASE_PATH, "html"])
 STATIC_BASE = os.sep.join([BASE_PATH, "static"])
 TEMPLATE_BASE = os.sep.join([BASE_PATH, "templates"])
@@ -39,7 +39,7 @@ def load_config():
 
 def post_path(file_name,folder):
     prefix = file_name.split(".")[0]
-    return os.sep.join([BASE_PATH,folder,"%s.%s"%(prefix,"md" if folder == "posts" else "html")])
+    return os.sep.join([BASE_PATH,folder,"%s.%s"%(prefix,"md" if folder == "_data" else "html")])
 
 def get_file(file_path):
     with open(file_path,"r") as f:
@@ -75,16 +75,16 @@ def split_content(md_file):
         if flags == 2:
             body_lines.append(line)
         else:
-            if line.strip() == "---":
+            if line.strip() == "///":
                 flags+=1
             else:
                 header_lines.append(line)
-    return dict([tuple(map( lambda item:item.strip(),line.split(":"))) for line in header_lines]),os.linesep.join(body_lines)
+    return dict([tuple(map( lambda item:item.strip(),line.split("="))) for line in header_lines]),os.linesep.join(body_lines)
 
 
 def load_posts():
     for mdfile_name in os.listdir(POSTS_BASE):
-        header,body = split_content(get_file(post_path(mdfile_name,"posts")))
+        header,body = split_content(get_file(post_path(mdfile_name,"_data")))
         post_time = header["post_time"]
         post_date = get_date_from_filename(mdfile_name, post_time)
         title = header["title"]
@@ -168,8 +168,8 @@ def post_posts():
         file_name = u"%s-%s-%s-%s.md"%(dn.year,dn.month,dn.day,file_title.replace(" ","_"))
         title = file_title
     post_time = u"-".join(map(str,[dn.hour,dn.minute,dn.second]))
-    file_header = u"\n".join([u"---",u"title:%s"%title,u"post_time:%s"%post_time,u"---",u"\n\n%s\n==============="%title,u"write the post body here"])
-    local_path = os.sep.join([BASE_PATH,"posts",file_name])
+    file_header = u"\n".join([u"///",u"title=%s"%title,u"post_time=%s"%post_time,u"///",u"\n\n%s\n==============="%title,u"write the post body here"])
+    local_path = os.sep.join([BASE_PATH,"_data",file_name])
     save_file(local_path, file_header)
     print "post file:",file_name
     print file_header
