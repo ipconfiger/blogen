@@ -9,7 +9,7 @@ from bottle import route, run, debug, static_file
 from jinja2 import Environment, FileSystemLoader
 sys.path.append(os.getcwd())
 
-PAGE_SIZE = 10
+PAGE_SIZE = 5
 BASE_PATH = os.getcwd()
 INDEX_PATH = os.sep.join([BASE_PATH, "index"])
 POSTS_BASE = os.sep.join([BASE_PATH, "posts"])
@@ -95,11 +95,13 @@ def load_posts():
     pages = (total/PAGE_SIZE)+1 if total%PAGE_SIZE else total/PAGE_SIZE
     for i in range(pages):
         start = i*PAGE_SIZE
-        PAGE_POSTS.append(sorted_posts[start:start+PAGE_SIZE])
+        page = sorted_posts[start:start+PAGE_SIZE]
+        PAGE_POSTS.append(page)
+
 
 def render_index(page_id):
-    config = load_config()
-    posts = PAGE_POSTS[0] if PAGE_POSTS else []
+    config = CONFIG
+    posts = PAGE_POSTS[page_id-1] if PAGE_POSTS else []
     total = len(POSTS)
     pages = len(PAGE_POSTS)
     page_list = [(i+1,"/index_%s.html"%(i+1)) for i in range(pages) ]
@@ -114,7 +116,7 @@ def render_index(page_id):
     return resp
 
 def render_post(file_name):
-    config = load_config()
+    config = CONFIG
     post =(lambda item:item[0] if item else None)([p for p in POSTS if p.filename == touni(file_name)])
     resp = env.get_template("post.html").render(**locals())
     save_file(post_path(tob(file_name)+".md","html"),resp)
@@ -139,10 +141,17 @@ def index_p(page_id):
 
 
 def open_server():
-    load_posts()
     debug(True)
-    print load_config()
-    run(host="0.0.0.0",port=5000)
+    global  CONFIG
+    CONFIG = load_config()
+    if "page_size" in CONFIG:
+        global PAGE_SIZE
+        PAGE_SIZE = int(CONFIG["page_size"])
+    port = 5000
+    if len(sys.argv)>2:
+        port = int(sys.argv[2])
+    load_posts()
+    run(host="0.0.0.0", port=port, reloader=True)
 
 def post_posts():
     if len(sys.argv)<3:
@@ -182,7 +191,7 @@ def init_site():
         sys.exit(1)
         return
     site_name = touni(sys.argv[2].strip())
-    config_file = "site_name: %s\n"%site_name
+    config_file = "site_name: %s\npage_size: 5\n"%site_name
     save_file(BASE_PATH+"/settings.yaml",config_file)
     os.mkdir(STATIC_BASE)
     os.mkdir(TEMPLATE_BASE)
@@ -212,13 +221,14 @@ def init_site():
     post_template = """<!DOCTYPE html>
 <html>
 <head>
-    <title>{{ config.site_name }}</title>
+    <title>{{ config.site_name }}-{{ post.filename }}</title>
 </head>
 <body>
 <h1>{{ post.title }}</h1>
 <div>
     {{ post.html_content|safe }}
 </div>
+<div>{{ post.post_date }}</div>
 </body>
 </html>
     """

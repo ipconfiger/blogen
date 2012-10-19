@@ -82,5 +82,8 @@ Mac下推荐Mou。Windows下可以用 [markdownpad](http://markdownpad.com/)
 6. 学会用git，不然你怎么向github提交自己写的内容啊？
 
 ###9 已经发现的bug
-很不幸，刚发到pip就发现了一个bug。我忘了在settings里面放配置首页列表分页的页大小的参数了。
-今天中午前在pip装过的同学只有换新版才能正常。
+
+这个问题已经解决了
+
+    很不幸，刚发到pip就发现了一个bug。我忘了在settings里面放配置首页列表分页的页大小的参数了。   
+    今天中午前在pip装过的同学只有换新版才能正常。
