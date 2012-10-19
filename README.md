@@ -30,7 +30,7 @@ Can you read chinese？yes i cam
 * templates是模板文件。这里只是生成了一个最简单的，模板可以完全根据自己的需要来改
 * static是存放站点的CSS，JS和图片文件的地方
 
-** 注意：templates目录下会默认生成 index.html 和 post.html，这两个文件一个是首页模板和内容页模板，可以自由修改，保持名字不变即可 **
+__注意：templates目录下会默认生成 index.html 和 post.html，这两个文件一个是首页模板和内容页模板，可以自由修改，保持名字不变即可__
 
 ###3 发布第一篇blog
 发布blog只需要一条命令即可
@@ -59,6 +59,10 @@ Mac下推荐Mou。Windows下可以用 [markdownpad](http://markdownpad.com/)
     $blogen --server
     
 站点启动后通过访问  http://127.0.0.1:5000 即可看到内容了。
+
+站点已经设置成自动reload，所以这个时候就可以开心的修改模板文件添加各种css，js，以及图片文件了。比如添加base.html到templates目录，然后修改index.html以及post.html继承base，blabla，剩下的就跟做一个静态站没啥区别了。
+
+__注意：在static目录放内容的时候现在很蛋痛的只支持往子目录里放内容，而且只支持一级子目录。比如css需要在static下建一个子目录css，然后放到css目录里，js同理可得__
 
 ###6 配置
 修改配置文件settings.yaml即可。要注意默认生成的两条不能去掉。
