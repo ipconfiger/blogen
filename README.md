@@ -5,6 +5,8 @@ A local static blog site generator and previewer,that help you deploy blog on gi
 
 Can you read chinese？yes i cam
 
+__注意：刚更新了一个版本到pypi，因为生成的markdown文件目录名的问题导致了push到库后build启动了jekyll编译失败导致无法build发布，所以修改了目录名，请已经按装了的童鞋尽快更新到最新版本0.0.0.3 pre__
+
 项目的由来
 -------
 为了弄公司的开发博客，很装13的选了github来host。为了SEO的缘故，以前那个 [jsloger](https://github.com/ipconfiger/jsloger) 就不怎么适合了。本着DRY的原则去考察了一下Jekyll，但是估计和ruby8字不和，搜索一下在github搭建blog大堆人都推荐这货，难道那家用着都这么欢乐么？事实是这货得自己创建一堆文件夹，自己创建一堆模板。文档里提到的Rake啥的，根本跑着不欢乐，down源码一看写那么多，就生成个静态文件的blog至于么？所以评估了一下，如果折腾Jekyll估计花两天，这两天折腾出来能弄的东西估计我花一天时间就用Python写好了。于是我就用Python写了目前这货。Jekyll能见的80%的功能应该都有，而且安装简单使用简便。如果对ruby没有强烈的爱就试试本货吧。欢迎Pythoner一起来完善。
@@ -25,7 +27,7 @@ Can you read chinese？yes i cam
     $blogen --init 站点名称
 这个命令会创建配置文件config.yaml和一大堆目录
 
-* posts是存放blog的markdown文件的地方
+* _data是存放blog的markdown文件的地方
 * html是生成的html文件存放的地方
 * templates是模板文件。这里只是生成了一个最简单的，模板可以完全根据自己的需要来改
 * static是存放站点的CSS，JS和图片文件的地方
@@ -88,6 +90,8 @@ __注意：在static目录放内容的时候现在很蛋痛的只支持往子目
 6. 学会用git，不然你怎么向github提交自己写的内容啊？
 
 ###9 已经发现的bug
+
+__注意：刚更新了一个版本到pypi，因为生成的markdown文件目录名的问题导致了push到库后build启动了jekyll编译失败导致无法build发布，所以修改了目录名，请已经按装了的童鞋尽快更新到最新版本__
 
 这个问题已经解决了
 
