@@ -56,6 +56,7 @@ class Posts(object):
         self.post_date = post_date
         self.md_content = touni(md_content)
         self.html_content = markdown.markdown(touni(md_content))
+        self.first_entry = False
 
     def __repr__(self):
         return u"filename=%s\ntitle=%s\nmd_content=%s\nhtml_content=%s\n"%(touni(self.filename),touni(self.title),touni(self.md_content),touni(self.html_content))
@@ -94,9 +95,15 @@ def load_posts():
     total = len(sorted_posts)
     pages = (total/PAGE_SIZE)+1 if total%PAGE_SIZE else total/PAGE_SIZE
     for i in range(pages):
+        dates = {}
         start = i*PAGE_SIZE
         page = sorted_posts[start:start+PAGE_SIZE]
         PAGE_POSTS.append(page)
+        for posts in page:
+            ds = str(posts.post_date.date())
+            if ds not in dates:
+                posts.first_entry = True
+                dates[ds]=ds
 
 
 def render_index(page_id):
@@ -117,7 +124,16 @@ def render_index(page_id):
 
 def render_post(file_name):
     config = CONFIG
-    post =(lambda item:item[0] if item else None)([p for p in POSTS if p.filename == touni(file_name)])
+    post_item =(lambda item:item[0] if item else None)([p for p in POSTS if p.filename == touni(file_name)])
+    if post_item:
+        post = dict(
+            filename = post_item.filename,
+            post_date = post_item.post_date,
+            title = post_item.title,
+            md_content = post_item.md_content,
+            html_content = post_item.html_content,
+            first_entry = True
+        )
     resp = env.get_template("post.html").render(**locals())
     save_file(post_path(tob(file_name)+".md","html"),resp)
     return resp
@@ -176,6 +192,8 @@ def post_posts():
     print "write to posts folder complete!"
 
 def rebuild_all():
+    global  CONFIG
+    CONFIG = load_config()
     load_posts()
     for i in range(len(PAGE_POSTS)):
         render_index(i+1)
@@ -191,7 +209,7 @@ def init_site():
         sys.exit(1)
         return
     site_name = touni(sys.argv[2].strip())
-    config_file = "site_name: %s\npage_size: 5\n"%site_name
+    config_file = u"site_name: %s\npage_size: 5\n"%site_name
     save_file(BASE_PATH+"/settings.yaml",config_file)
     os.mkdir(STATIC_BASE)
     os.mkdir(TEMPLATE_BASE)

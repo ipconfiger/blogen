@@ -5,7 +5,7 @@ __author__ = 'alex'
 
 setup(
     name='blogen',
-    version='0.0.0.3 pre',
+    version='0.0.0.7 pre',
     packages=['blogen'],
     author='Alexander.Li',
     author_email='superpowerlee@gmail.com',
