@@ -90,6 +90,8 @@ def load_posts():
         post_date = get_date_from_filename(mdfile_name, post_time)
         title = header["title"]
         post = Posts(mdfile_name.split(".")[0], title, post_date, body)
+        for k,v in header.iteritems():
+            setattr(post,k,v)
         POSTS.append(post)
     sorted_posts = sorted(POSTS,key=lambda item:item.post_date,reverse=True)
     total = len(sorted_posts)
