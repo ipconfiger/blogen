@@ -46,6 +46,10 @@ __注意：templates目录下会默认生成 index.html 和 post.html，这两�
     $blogen --post "2012-1-1-hello word"
     
 创建后随便找个文本编辑器或者markdown的编辑器就可以去编辑blog的文件了。
+新创建的.md 文件头部有一个固定的头部，定义在两行 /// 之间。格式为  变量名＝值
+其中 title 和 post_time 是固定的变量，必须存在不能删除，但是可以修改值，比如用英文文件名创建的title值是英文的，在这里可以改成中文，这样文件名是英文的避免一些系统的中文路径不兼容问题。
+在此之外可以自己定义额外的变量，这些变量会作为post对象的属性在渲染模板的时候被注入到对象中
+
 Mac下推荐Mou。Windows下可以用 [markdownpad](http://markdownpad.com/)
 
 ###4 生成
@@ -80,6 +84,9 @@ __注意：在static目录放内容的时候现在很蛋痛的只支持往子目
 * md_content     Markdown格式的内容
 * html_content   HTML格式的内容 
 
+动态属性：
+通过markdown文件头部定义的site_name 和 post_time 之外用户自定义的变量
+
 ###8 其他需要自己做的或者知道的
 
 1. 学会jinja2的模板，因为本货的模板是基于jinja2的
@@ -97,3 +104,15 @@ __注意：刚更新了一个版本到pypi，因为生成的markdown文件目录
 
     很不幸，刚发到pip就发现了一个bug。我忘了在settings里面放配置首页列表分页的页大小的参数了。   
     今天中午前在pip装过的同学只有换新版才能正常。
+
+
+###10 New Feature
+
+####0.0.0.7 pre:
+1. 将markdown文件头定义的变量动态注入到post对象里。这样就可以在模板里根据这些数据来动态生成点东西
+2. 修改了生成的markdown文件头格式，为了不和Jekyll的头部混淆
+
+
+###11 打算增加的Feature
+
+1. 生成单页，类似Wiki的方式来组织页面 
