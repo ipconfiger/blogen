@@ -57,6 +57,7 @@ class Posts(object):
         self.md_content = touni(md_content)
         self.html_content = markdown.markdown(touni(md_content))
         self.first_entry = False
+        self.ext_ppts = {}
 
     def __repr__(self):
         return u"filename=%s\ntitle=%s\nmd_content=%s\nhtml_content=%s\n"%(touni(self.filename),touni(self.title),touni(self.md_content),touni(self.html_content))
@@ -91,7 +92,8 @@ def load_posts():
         title = header["title"]
         post = Posts(mdfile_name.split(".")[0], title, post_date, body)
         for k,v in header.iteritems():
-            setattr(post,k,v)
+            if k not in ["title","post_time"]:
+                post.ext_ppts[k]=touni(v)
         POSTS.append(post)
     sorted_posts = sorted(POSTS,key=lambda item:item.post_date,reverse=True)
     total = len(sorted_posts)
@@ -136,6 +138,7 @@ def render_post(file_name):
             html_content = post_item.html_content,
             first_entry = True
         )
+        post.update(post_item.ext_ppts)
     resp = env.get_template("post.html").render(**locals())
     save_file(post_path(tob(file_name)+".md","html"),resp)
     return resp
