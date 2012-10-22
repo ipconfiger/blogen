@@ -70,14 +70,14 @@ def get_date_from_filename(file_name, time_str):
     return datetime.datetime(*map(int,title_spans))
 
 def split_content(md_file):
-    lines = md_file.split("\n")
+    lines = [l.strip() for l in md_file.split("\n")]
     flags = 0
     header_lines, body_lines = [], []
     for line in lines:
         if flags == 2:
             body_lines.append(line)
         else:
-            if line.strip() == "///":
+            if "///" in line.strip():
                 flags+=1
             else:
                 header_lines.append(line)
